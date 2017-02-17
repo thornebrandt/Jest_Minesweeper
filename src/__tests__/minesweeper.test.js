@@ -24,13 +24,14 @@ describe("Minesweeper", () => {
 	});
 
 	it("creates 100 cells", () => {
-		expect(ms.cells.length).toBe(100);
-		expect(ms.cells[0]).toBeInstanceOf(Cell);
+		expect(ms.cellMatrix.length).toBe(10);
+		expect(ms.cellMatrix[0].length).toBe(10);
+		expect(ms.cellMatrix[0][0]).toBeInstanceOf(Cell);
 	});
 
 	it("assigns the correct attribute to cell", () => {
-		let firstCell = ms.cells[0];
-		let lastCell = ms.cells[99];
+		let firstCell = ms.cellMatrix[0][0];
+		let lastCell = ms.cellMatrix[9][9];
 		expect(firstCell.index).toBe(0);
 		expect(firstCell.rowIndex).toBe(0);
 		expect(firstCell.colIndex).toBe(0);
@@ -64,9 +65,11 @@ describe("Minesweeper", () => {
 
 	it('passes isBomb to 10 cells', () => {
 		let numBombsFound = 0;
-		for(let cell of ms.cells){
-			if(cell.isBomb){
-				numBombsFound++;
+		for(let row of ms.cellMatrix){
+			for(let cell of row){
+				if(cell.isBomb){
+					numBombsFound++;
+				}
 			}
 		}
 		expect(numBombsFound).toBe(10);
@@ -84,6 +87,11 @@ describe("Minesweeper", () => {
 			}
 		}
 		expect(numBombs).toBe(10);
+	});
+
+	it("add neighbors to cells", () => {
+		let topLeftCell = ms.cellMatrix[0][0];
+		expect(topLeftCell.neighbors.length).toBe(3);
 	});
 
 });
