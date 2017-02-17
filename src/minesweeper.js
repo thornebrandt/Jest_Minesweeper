@@ -32,10 +32,12 @@ class MineSweeper{
 		let index = 0;
 		for(let i = 0; i < this.rows; i++){
 			for(let j = 0; j < this.cols; j++){
+				let isBomb = this.bombArray.indexOf(index) !== -1;
 				this.cells.push(new Cell({
 					index: index,
 					rowIndex: i,
-					colIndex: j
+					colIndex: j,
+					isBomb: isBomb
 				}));
 				index++;
 			}
@@ -44,7 +46,9 @@ class MineSweeper{
 
 	render(){
 		this.el = document.getElementById("main");
-		this.el.innerHTML = "minesweeper";
+		for(let cell of this.cells){
+			this.el.appendChild(cell.el);
+		}
 	}
 }
 

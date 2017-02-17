@@ -5,6 +5,11 @@ describe("Minesweeper", () => {
 	let ms;
 	let el;
 
+	const text = (node) => {
+		let innerHTML = node.innerHTML;
+		return innerHTML.replace(/<[^>]*>/g, "");
+	}
+
 	beforeEach(() => {
 		document.body.innerHTML = '<div id="main">';
 		el = document.getElementById("main");
@@ -47,8 +52,6 @@ describe("Minesweeper", () => {
 		expect(ms2.bombArray).not.toEqual(ms.bombArray); //might fail *randomly
 	});
 
-
-
 	it("generates unique numbers", () => {
 		for(let i = 0; i < 10; i++){
 			ms = new MineSweeper({ rows: 10, cols: 10, bombs: 10});
@@ -57,6 +60,20 @@ describe("Minesweeper", () => {
 			});
 			expect(containsDupe).toBe(false);
 		}
+	});
+
+	it('passes isBomb to 10 cells', () => {
+		let numBombsFound = 0;
+		for(let cell of ms.cells){
+			if(cell.isBomb){
+				numBombsFound++;
+			}
+		}
+		expect(numBombsFound).toBe(10);
+	});
+
+	it("displays bombs on DOM (temporary)", () => {
+		expect(text(el).length).toBe(100);
 	});
 
 });
