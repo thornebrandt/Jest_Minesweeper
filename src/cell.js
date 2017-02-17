@@ -1,6 +1,7 @@
 class Cell{
 	constructor(options){
 		Object.assign(this, options);
+		this.onExplode = this.onExplode || this.displayX;
 		this.checkBomb = this.checkBomb.bind(this);
 		this.addEl();
 	}
@@ -13,7 +14,7 @@ class Cell{
 		this.el.addEventListener("click", this.checkBomb);
 	}
 
-	checkNearbyBombs(){
+	getNearbyBombCount(){
 		if(this.neighbors){
 			let total = 0;
 			for(let neighbor of this.neighbors){
@@ -21,15 +22,43 @@ class Cell{
 					total++;
 				}
 			}
+			this.checked = true;
 			return total;
 		} else {
+			this.proceed();
 			return 0;
 		}
 	}
 
-	checkBomb(){
-		return this.isBomb;
+	proceed(){
+		for(let neighbor of this.neighbors){
+			if(!neighbor.checked){
+				neighbor.displayBombCount();
+			}
+		}
 	}
+
+	displayBombCount(){
+		this.el.innerHTML = this.getNearbyBombCount();
+	}
+
+	displayX(){
+		this.el.innerHTML = '!';
+	}
+
+	explode(){
+		this.onExplode();
+	}
+
+	checkBomb(){
+		if(this.isBomb){
+			this.explode();
+			return;
+		} else {
+			this.displayBombCount();
+		}
+	}
+
 }
 
 export default Cell;

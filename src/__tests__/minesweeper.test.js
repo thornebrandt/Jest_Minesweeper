@@ -106,7 +106,7 @@ describe("Minesweeper", () => {
 		let bombArray = [1];
 		let ms2 = new MineSweeper({ bombArray: bombArray });
 		let cell = ms2.cellMatrix[0][0];
-		expect(cell.checkNearbyBombs()).toBe(1);
+		expect(cell.getNearbyBombCount()).toBe(1);
 	});
 
 });

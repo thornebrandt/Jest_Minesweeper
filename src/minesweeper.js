@@ -3,6 +3,9 @@ import Cell from './cell';
 class MineSweeper{
 	constructor(options){
 		Object.assign(this, options);
+		if(this.bombArray){
+			this.manualBombArray = this.bombArray;
+		}
 		this.rows = this.rows || 10;
 		this.cols = this.cols || 10;
 		this.bombs = this.bombs || 10;
@@ -12,11 +15,20 @@ class MineSweeper{
 		this.addBombs();
 		this.addCells();
 		this.populateNeighbors();
-		this.render();
+	}
+
+	reset(){
+		this.el.innerHTML = "";
+		this.cellMatrix = [];
+		this.addBombs();
+		this.addCells();
+		this.populateNeighbors();
 	}
 
 	addBombs(){
-		if(!this.bombArray){
+		if(this.manualBombArray){
+			this.bombArray = this.manualBombArray
+		} else {
 			this.bombArray = [];
 			for(let i = 0; i < this.bombs; i++){
 				this.bombArray.push(this.getRandomBombIndex(this.bombArray));
@@ -42,7 +54,8 @@ class MineSweeper{
 					index: index,
 					rowIndex: i,
 					colIndex: j,
-					isBomb: isBomb
+					isBomb: isBomb,
+					onExplode: this.reset.bind(this)
 				});
 				row.push(cell);
 				this.el.appendChild(cell.el);
@@ -102,11 +115,6 @@ class MineSweeper{
 		}
 	}
 
-	render(){
-		for(let cell of this.cellMatrix){
-
-		}
-	}
 }
 
 export default MineSweeper;
