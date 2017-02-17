@@ -13,8 +13,13 @@ class MineSweeper{
 	}
 
 	addBombs(){
-		for(let i = 0; i < this.total; i++){
-			this.cells.push(new Cell());
+		for(let i = 0; i < this.rows; i++){
+			for(let j = 0; j < this.cols; j++){
+				this.cells.push(new Cell({
+					rowIndex: i,
+					colIndex: j
+				}));
+			}
 		}
 	}
 

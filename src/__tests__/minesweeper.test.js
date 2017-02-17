@@ -23,5 +23,11 @@ describe("Minesweeper", () => {
 		expect(ms.cells[0]).toBeInstanceOf(Cell);
 	});
 
+	it("assigns the correct attribute to cell", () => {
+		let firstCell = ms.cells[0];
+		let lastCell = ms.cells[99];
+		expect(firstCell.rowIndex).toBe(0);
+	});
+
 
 });

@@ -1,5 +1,6 @@
 class Cell{
-	constructor(){
+	constructor(options){
+		Object.assign(this, options);
 	}
 }
 
