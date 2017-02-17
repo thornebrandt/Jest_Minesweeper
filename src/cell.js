@@ -13,6 +13,20 @@ class Cell{
 		this.el.addEventListener("click", this.checkBomb);
 	}
 
+	checkNearbyBombs(){
+		if(this.neighbors){
+			let total = 0;
+			for(let neighbor of this.neighbors){
+				if(neighbor.isBomb){
+					total++;
+				}
+			}
+			return total;
+		} else {
+			return 0;
+		}
+	}
+
 	checkBomb(){
 		return this.isBomb;
 	}

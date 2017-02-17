@@ -91,7 +91,22 @@ describe("Minesweeper", () => {
 
 	it("add neighbors to cells", () => {
 		let topLeftCell = ms.cellMatrix[0][0];
+		let middleCell = ms.cellMatrix[4][4];
 		expect(topLeftCell.neighbors.length).toBe(3);
+		expect(middleCell.neighbors.length).toBe(8);
+	});
+
+	it("adds manual bomb array for testing", () => {
+		let bombArray = [1];
+		let ms2 = new MineSweeper({ bombArray: bombArray });
+		expect(ms2.bombArray.length).toBe(1);
+	});
+
+	it("cell keeps track of nearby bombs", () => {
+		let bombArray = [1];
+		let ms2 = new MineSweeper({ bombArray: bombArray });
+		let cell = ms2.cellMatrix[0][0];
+		expect(cell.checkNearbyBombs()).toBe(1);
 	});
 
 });

@@ -16,9 +16,11 @@ class MineSweeper{
 	}
 
 	addBombs(){
-		this.bombArray = [];
-		for(let i = 0; i < this.bombs; i++){
-			this.bombArray.push(this.getRandomBombIndex(this.bombArray));
+		if(!this.bombArray){
+			this.bombArray = [];
+			for(let i = 0; i < this.bombs; i++){
+				this.bombArray.push(this.getRandomBombIndex(this.bombArray));
+			}
 		}
 	}
 

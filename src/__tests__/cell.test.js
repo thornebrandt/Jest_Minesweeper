@@ -21,4 +21,5 @@ describe("Cell", () => {
 		expect(checkBombSpy.calledOnce).toBe(true);
 		expect(checkBombSpy.returned(true)).toBe(true);
 	});
+
 });
