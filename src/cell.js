@@ -3,6 +3,9 @@ class Cell{
 		Object.assign(this, options);
 		this.onExplode = this.onExplode || this.displayX;
 		this.checkBomb = this.checkBomb.bind(this);
+		this.getNearbyBombCount = this.getNearbyBombCount.bind(this);
+		this.displayBombCount = this.displayBombCount.bind(this);
+		this.proceed = this.proceed.bind(this);
 		this.addEl();
 	}
 
@@ -23,9 +26,11 @@ class Cell{
 				}
 			}
 			this.checked = true;
+			if(total === 0){
+				this.proceed();
+			}
 			return total;
 		} else {
-			this.proceed();
 			return 0;
 		}
 	}

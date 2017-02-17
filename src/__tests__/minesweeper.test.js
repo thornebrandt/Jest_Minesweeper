@@ -86,7 +86,6 @@ describe("Minesweeper", () => {
 				numBombs++;
 			}
 		}
-		expect(numBombs).toBe(10);
 	});
 
 	it("add neighbors to cells", () => {
@@ -108,5 +107,20 @@ describe("Minesweeper", () => {
 		let cell = ms2.cellMatrix[0][0];
 		expect(cell.getNearbyBombCount()).toBe(1);
 	});
+
+	it("displays stringied bombs for testing", () => {
+		let ms2 = new MineSweeper({
+			rows: 3,
+			cols: 3,
+			bombs: 1,
+			bombArray: [1]
+		});
+		let string = ms2.stringify();
+		let expectedString = "[1X1][111][000]";
+		expect(string).toBe(expectedString);
+	});
+
+
+
 
 });
