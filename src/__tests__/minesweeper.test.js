@@ -72,8 +72,18 @@ describe("Minesweeper", () => {
 		expect(numBombsFound).toBe(10);
 	});
 
-	it("displays bombs on DOM (temporary)", () => {
-		expect(text(el).length).toBe(100);
+	it("displays bombs on DOM", () => {
+		let cells = document.getElementsByClassName("cell");
+		expect(cells.length).toBe(100);
+
+		//temporary, for display of bombs
+		let numBombs = 0;
+		for(let cell of cells){
+			if(cell.innerHTML === 'X'){
+				numBombs++;
+			}
+		}
+		expect(numBombs).toBe(10);
 	});
 
 });

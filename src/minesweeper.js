@@ -8,6 +8,7 @@ class MineSweeper{
 		this.bombs = this.bombs || 10;
 		this.total = this.rows * this.cols;
 		this.cells = [];
+		this.el = document.getElementById("main");
 		this.addBombs();
 		this.addCells();
 		this.render();
@@ -33,21 +34,23 @@ class MineSweeper{
 		for(let i = 0; i < this.rows; i++){
 			for(let j = 0; j < this.cols; j++){
 				let isBomb = this.bombArray.indexOf(index) !== -1;
-				this.cells.push(new Cell({
+				let cell = new Cell({
 					index: index,
 					rowIndex: i,
 					colIndex: j,
 					isBomb: isBomb
-				}));
+				});
+				this.cells.push(cell);
+				this.el.appendChild(cell.el);
 				index++;
 			}
+			const br = document.createElement("br");
+			this.el.appendChild(br);
 		}
 	}
 
 	render(){
-		this.el = document.getElementById("main");
 		for(let cell of this.cells){
-			this.el.appendChild(cell.el);
 		}
 	}
 }

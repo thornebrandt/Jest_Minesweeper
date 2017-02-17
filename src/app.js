@@ -1,2 +1,4 @@
-const main = document.getElementById("main");
-main.append("howdy");
+import MineSweeper from './minesweeper';
+
+let ms = new MineSweeper();
+ms.render();
