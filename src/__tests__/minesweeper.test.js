@@ -26,8 +26,37 @@ describe("Minesweeper", () => {
 	it("assigns the correct attribute to cell", () => {
 		let firstCell = ms.cells[0];
 		let lastCell = ms.cells[99];
+		expect(firstCell.index).toBe(0);
 		expect(firstCell.rowIndex).toBe(0);
+		expect(firstCell.colIndex).toBe(0);
+		expect(lastCell.index).toBe(99);
+		expect(lastCell.rowIndex).toBe(9);
+		expect(lastCell.colIndex).toBe(9);
 	});
 
+	it("creates 10 bombs", () => {
+		expect(ms.bombArray.length).toBe(10);
+	});
+
+	it("creates integer bomb indexes", () => {
+		expect(ms.bombArray[0]).toBe( parseInt(ms.bombArray[0] ));
+	});
+
+	it("generates bomb indexes randomly", () => {
+		const ms2 = new MineSweeper({ rows: 10, cols: 10, bombs: 10});
+		expect(ms2.bombArray).not.toEqual(ms.bombArray); //might fail *randomly
+	});
+
+
+
+	it("generates unique numbers", () => {
+		for(let i = 0; i < 10; i++){
+			ms = new MineSweeper({ rows: 10, cols: 10, bombs: 10});
+			let containsDupe = ms.bombArray.some((item, i) => {
+				return ms.bombArray.indexOf(item) !== i;
+			});
+			expect(containsDupe).toBe(false);
+		}
+	});
 
 });
