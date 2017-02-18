@@ -11,7 +11,7 @@ describe("Minesweeper", () => {
 	}
 
 	beforeEach(() => {
-		document.body.innerHTML = '<div id="main">';
+		document.body.innerHTML = '<div id="main" /><div id="numBombs" />';
 		el = document.getElementById("main");
 		ms = new MineSweeper({ rows: 10, cols: 10, bombs: 10});
 	});
@@ -78,14 +78,6 @@ describe("Minesweeper", () => {
 	it("displays bombs on DOM", () => {
 		let cells = document.getElementsByClassName("cell");
 		expect(cells.length).toBe(100);
-
-		//temporary, for display of bombs
-		let numBombs = 0;
-		for(let cell of cells){
-			if(cell.innerHTML === 'X'){
-				numBombs++;
-			}
-		}
 	});
 
 	it("add neighbors to cells", () => {
@@ -108,7 +100,7 @@ describe("Minesweeper", () => {
 		expect(cell.getNearbyBombCount()).toBe(1);
 	});
 
-	it("displays stringied bombs for testing", () => {
+	it("Minesweeper.stringify bombs for testing", () => {
 		let ms2 = new MineSweeper({
 			rows: 3,
 			cols: 3,
@@ -120,7 +112,8 @@ describe("Minesweeper", () => {
 		expect(string).toBe(expectedString);
 	});
 
-
-
+	it("Displays the numbers of bombs", () => {
+		expect(ms.bombsLeft.innerHTML).toBe("10 bombs left");
+	});
 
 });

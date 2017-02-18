@@ -6,23 +6,27 @@ class MineSweeper{
 		if(this.bombArray){
 			this.manualBombArray = this.bombArray;
 		}
+		this.el = document.getElementById("main");
 		this.rows = this.rows || 10;
 		this.cols = this.cols || 10;
 		this.bombs = this.bombs || 10;
 		this.total = this.rows * this.cols;
-		this.cellMatrix = [];
-		this.el = document.getElementById("main");
-		this.addBombs();
-		this.addCells();
-		this.populateNeighbors();
+		this.reset();
 	}
 
 	reset(){
 		this.el.innerHTML = "";
+		this.bombsLeft = document.createElement("p");
+		this.el.appendChild(this.bombsLeft);
 		this.cellMatrix = [];
 		this.addBombs();
 		this.addCells();
 		this.populateNeighbors();
+		this.displayBombsLeft();
+	}
+
+	displayBombsLeft(){
+		this.bombsLeft.innerHTML = "10 bombs left";
 	}
 
 	addBombs(){
@@ -77,37 +81,29 @@ class MineSweeper{
 		if(!top){
 			if(!left){
 				neighbors.push(this.cellMatrix[y - 1][x - 1]);
-				//neighbors.push(this.cellMatrix[x - 1][y - 1]);
 			}
 			neighbors.push(this.cellMatrix[y - 1][x]);
-			//neighbors.push(this.cellMatrix[x][y - 1]);
 			if(!right){
 				neighbors.push(this.cellMatrix[y - 1][x + 1]);
-				//neighbors.push(this.cellMatrix[x + 1][y - 1]);
 			}
 		}
 
 		if(!left){
 			neighbors.push(this.cellMatrix[y][x - 1]);
-			//neighbors.push(this.cellMatrix[x - 1][y]);
 		}
 
 		//CURRENT CELL
 
 		if(!right){
 			neighbors.push(this.cellMatrix[y][x + 1]);
-			//neighbors.push(this.cellMatrix[x + 1][y]);
 		}
 		if(!bottom){
 			if(!left){
 				neighbors.push(this.cellMatrix[y + 1][x - 1]);
-				// neighbors.push(this.cellMatrix[x - 1][y + 1]);
 			}
 			neighbors.push(this.cellMatrix[y + 1][x]);
-			//neighbors.push(this.cellMatrix[x][y + 1]);
 			if(!right){
 				neighbors.push(this.cellMatrix[y + 1][x + 1]);
-				//neighbors.push(this.cellMatrix[x + 1][y + 1]);
 			}
 		}
 		return neighbors;

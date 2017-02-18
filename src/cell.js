@@ -3,18 +3,21 @@ class Cell{
 		Object.assign(this, options);
 		this.onExplode = this.onExplode || this.displayX;
 		this.checkBomb = this.checkBomb.bind(this);
+		this.clickHandler = this.clickHandler.bind(this);
+		this.contextHandler = this.contextHandler.bind(this);
 		this.getNearbyBombCount = this.getNearbyBombCount.bind(this);
 		this.displayBombCount = this.displayBombCount.bind(this);
 		this.proceed = this.proceed.bind(this);
+		this.flag = false;
 		this.addEl();
 	}
 
 	addEl(){
 		this.el = document.createElement("div");
-		let tempDisplay = this.isBomb ? 'X' : 'O'
-		this.el.innerHTML = tempDisplay;
+		this.el.innerHTML = "&nbsp;";
 		this.el.classList.add('cell');
-		this.el.addEventListener("click", this.checkBomb);
+		this.el.addEventListener("click", this.clickHandler);
+		this.el.oncontextmenu = this.contextHandler;
 	}
 
 	getNearbyBombCount(){
@@ -61,6 +64,30 @@ class Cell{
 			return;
 		} else {
 			this.displayBombCount();
+		}
+	}
+
+	toggleFlag(){
+		this.flag = !this.flag;
+		if(this.flag){
+			this.el.classList.add('flag');
+		} else {
+			this.el.classList.remove('flag');
+		}
+	}
+
+	contextHandler(e){
+		this.toggleFlag();
+		e.preventDefault();
+	}
+
+	clickHandler(e){
+		e.preventDefault();
+		if(e.button === 2){
+			//rightclick
+			this.toggleFlag();
+		} else {
+			this.checkBomb();
 		}
 	}
 
