@@ -53,7 +53,6 @@ class MineSweeper{
 
 	endGame(){
 		if(_.isEqual(this.flagArray, this.bombArray)){
-			console.log("FLAGS!", this.flagArray, this.bombArray);
 			this.winGame();
 		} else {
 			this.loseGame();
@@ -62,10 +61,20 @@ class MineSweeper{
 
 	winGame(){
 		this.bombsLeftEl.innerHTML = "You win!";
+		this.revealBombs();
 	}
 
 	loseGame(){
 		this.bombsLeftEl.innerHTML = "You lose!";
+		this.revealBombs();
+	}
+
+	revealBombs(){
+		for(let row of this.cellMatrix){
+			for(let cell of row){
+				cell.displayBombCount();
+			}
+		}
 	}
 
 	onFlag(flagDropped, flagIndex){
@@ -107,7 +116,7 @@ class MineSweeper{
 					colIndex: j,
 					isBomb: isBomb,
 					onFlag: this.onFlag.bind(this),
-					onExplode: this.reset.bind(this)
+					onExplode: this.loseGame.bind(this)
 				});
 				row.push(cell);
 				this.el.appendChild(cell.el);

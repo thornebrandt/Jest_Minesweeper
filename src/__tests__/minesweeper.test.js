@@ -6,7 +6,7 @@ import { spy } from 'sinon';
 describe("Minesweeper", () => {
 	let ms;
 	let el;
-	let winGameSpy, loseGameSpy;
+	let winGameSpy, loseGameSpy, revealBombsSpy;
 
 	const text = (node) => {
 		let innerHTML = node.innerHTML;
@@ -19,11 +19,13 @@ describe("Minesweeper", () => {
 		ms = new MineSweeper({ rows: 10, cols: 10, bombs: 10});
 		winGameSpy = spy(MineSweeper.prototype, "winGame");
 		loseGameSpy = spy(MineSweeper.prototype, "loseGame");
+		revealBombsSpy = spy(MineSweeper.prototype, "revealBombs");
 	});
 
 	afterEach(() => {
 		winGameSpy.restore();
 		loseGameSpy.restore();
+		revealBombsSpy.restore();
 	});
 
 	it("is to be created with 100 cells and 10 bombs", () => {
@@ -155,7 +157,6 @@ describe("Minesweeper", () => {
 		firstCell.el.dispatchEvent(e2);
 		expect(ms2.bombsLeft).toBe(0);
 		expect(winGameSpy.calledOnce).toBe(true);
-		//expect(ms2.bombsLeftEl.innerHTML).toBe("You win!");
 		ms2.cellMatrix[0][1].el.dispatchEvent(e2);
 		expect(winGameSpy.calledOnce).toBe(true);
 		expect(loseGameSpy.called).toBe(false);
@@ -172,6 +173,43 @@ describe("Minesweeper", () => {
 		expect(winGameSpy.called).toBe(false);
 		expect(loseGameSpy.calledOnce).toBe(true);
 		//expect(ms2.bombsLeftEl.innerHTML).toBe("You lose!");
+	});
+
+	it("displays if you have won", () => {
+		ms.winGame();
+		expect(ms.bombsLeftEl.innerHTML).toBe("You win!");
+	});
+
+	it("displays if you have lost", () => {
+		ms.loseGame();
+		expect(ms.bombsLeftEl.innerHTML).toBe("You lose!");
+	});
+
+	it("reveals bombs", () => {
+		ms.revealBombs();
+		let bombCell;
+		let isEmptyCell = false;
+		for(let row of ms.cellMatrix){
+			for(let cell of row){
+				if(cell.el.innerHTML === "&nbsp;"){
+					isEmptyCell = true;
+				}
+				if(cell.isBomb){
+					bombCell = cell;
+				}
+			}
+		}
+		expect(bombCell.el.innerHTML).toBe('X');
+		expect(isEmptyCell).toBe(false);
+	});
+
+	it('loses game after a bomb is clicked', () => {
+		let bombArray = [0];
+		let ms = new MineSweeper({ bombArray: bombArray, bombs: 1 });
+		let firstCell = ms.cellMatrix[0][0];
+		let e = new MouseEvent("click");
+		firstCell.el.dispatchEvent(e);
+		expect(loseGameSpy.calledOnce).toBe(true);
 	});
 
 });

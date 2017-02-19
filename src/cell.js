@@ -47,11 +47,15 @@ class Cell{
 	}
 
 	displayBombCount(){
-		this.numBombs = this.numBombs || this.getNearbyBombCount();
-		if(this.flag){
-			this.el.innerHTML = "&nbsp;";
+		if(this.isBomb){
+			this.el.innerHTML = 'X'
 		} else {
-			this.el.innerHTML = this.numBombs;
+			this.numBombs = this.numBombs || this.getNearbyBombCount();
+			if(this.flag){
+				this.el.innerHTML = "&nbsp;";
+			} else {
+				this.el.innerHTML = this.numBombs;
+			}2
 		}
 	}
 
