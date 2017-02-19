@@ -1,4 +1,5 @@
 import Cell from './cell';
+import _ from 'lodash';
 
 class MineSweeper{
 	constructor(options){
@@ -20,6 +21,7 @@ class MineSweeper{
 		this.bombsLeftEl = document.createElement("p");
 		this.el.appendChild(this.bombsLeftEl);
 		this.cellMatrix = [];
+		this.flagArray = [];
 		this.addBombs();
 		this.addCells();
 		this.populateNeighbors();
@@ -49,16 +51,48 @@ class MineSweeper{
 		return int;
 	}
 
-	onFlag(addBomb){
-		if(addBomb){
-			this.bombsLeft--;
-			if(this.bombsLeft === 0){
-				this.bombsLeftEl.innerHTML = "You win!";
-			} else {
-			}
+	endGame(){
+		if(_.isEqual(this.flagArray, this.bombArray)){
+			console.log("FLAGS!", this.flagArray, this.bombArray);
+			this.winGame();
 		} else {
-			this.bombsLeft++;
+			this.loseGame();
 		}
+	}
+
+	winGame(){
+		this.bombsLeftEl.innerHTML = "You win!";
+	}
+
+	loseGame(){
+		this.bombsLeftEl.innerHTML = "You lose!";
+	}
+
+	onFlag(flagDropped, flagIndex){
+		if(this.bombsLeft){
+			if(flagDropped){
+				this.addFlag(flagIndex);
+				if(this.bombsLeft === 0){
+					this.endGame();
+				} else {
+					this.displayBombsLeft();
+				}
+			} else {
+				this.removeFlag(flagIndex);
+				this.displayBombsLeft();
+			}
+		}
+	}
+
+	addFlag(flagIndex){
+		this.flagArray.push(flagIndex);
+		this.bombsLeft--;
+	}
+
+	removeFlag(flagIndex){
+		let pos = this.flagArray.indexOf(flagIndex);
+		this.flagArray.splice(pos, 1);
+		this.bombsLeft++;
 	}
 
 	addCells(){

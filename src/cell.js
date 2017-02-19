@@ -83,7 +83,7 @@ class Cell{
 				this.el.innerHTML = this.numBombs;
 			}
 		}
-		this.onFlag(this.flag);
+		this.onFlag(this.flag, this.index);
 	}
 
 	contextHandler(e){

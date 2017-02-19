@@ -1,9 +1,12 @@
 import MineSweeper from '../minesweeper';
 import Cell from '../cell';
+import { spy } from 'sinon';
+
 
 describe("Minesweeper", () => {
 	let ms;
 	let el;
+	let winGameSpy, loseGameSpy;
 
 	const text = (node) => {
 		let innerHTML = node.innerHTML;
@@ -14,6 +17,13 @@ describe("Minesweeper", () => {
 		document.body.innerHTML = '<div id="main" /><div id="numBombs" />';
 		el = document.getElementById("main");
 		ms = new MineSweeper({ rows: 10, cols: 10, bombs: 10});
+		winGameSpy = spy(MineSweeper.prototype, "winGame");
+		loseGameSpy = spy(MineSweeper.prototype, "loseGame");
+	});
+
+	afterEach(() => {
+		winGameSpy.restore();
+		loseGameSpy.restore();
 	});
 
 	it("is to be created with 100 cells and 10 bombs", () => {
@@ -112,26 +122,56 @@ describe("Minesweeper", () => {
 		expect(string).toBe(expectedString);
 	});
 
-	it("Displays the numbers of bombs", () => {
-		expect(ms.bombsLeftEl.innerHTML).toBe("10 bombs left");
-	});
-
 	it("updates bomb count after flag", () => {
 		let cell = ms.cellMatrix[0][0];
 		let e2 = new MouseEvent("contextmenu");
 		cell.el.dispatchEvent(e2);
-		expect(ms.bombsLeftEl.innerHTML).toBe("9 bombs left")
+		expect(ms.bombsLeft).toBe(9);
 		cell.el.dispatchEvent(e2);
-		expect(ms.bombsLeftEl.innerHTML).toBe("10 bombs left")
+		expect(ms.bombsLeft).toBe(10);
 	});
 
-	it.only("ends game after bombs depleted", () => {
+	it("updates flag array after flag", () => {
+		expect(ms.flagArray).toEqual([]);
+		let cell = ms.cellMatrix[0][0];
+		let e2 = new MouseEvent("contextmenu");
+		cell.el.dispatchEvent(e2);
+		expect(ms.flagArray).toEqual([0]);
+		ms.flagArray = [3, 2, 1, 0, 4, 5];
+		console.log("ms.flagArray", ms.flagArray);
+		cell.el.dispatchEvent(e2);
+		expect(ms.flagArray).toEqual([3, 2, 1, 4, 5]);
+	});
+
+	it("Displays the numbers of bombs", () => {
+		expect(ms.bombsLeftEl.innerHTML).toBe("10 bombs left");
+	});
+
+	it("wins game after correct bombs are depleted", () => {
 		let bombArray = [0];
 		let ms2 = new MineSweeper({ bombArray: bombArray, bombs: 1 });
 		let firstCell = ms2.cellMatrix[0][0];
 		let e2 = new MouseEvent("contextmenu");
 		firstCell.el.dispatchEvent(e2);
 		expect(ms2.bombsLeft).toBe(0);
-		expect(ms2.bombsLeftEl.innerHTML).toBe("You win!");
+		expect(winGameSpy.calledOnce).toBe(true);
+		//expect(ms2.bombsLeftEl.innerHTML).toBe("You win!");
+		ms2.cellMatrix[0][1].el.dispatchEvent(e2);
+		expect(winGameSpy.calledOnce).toBe(true);
+		expect(loseGameSpy.called).toBe(false);
+		//expect(ms2.bombsLeftEl.innerHTML).toBe("You win!");
 	});
+
+	it("loses game after incorrect bombs are chosen", () => {
+		let bombArray = [1];
+		let ms2 = new MineSweeper({ bombArray: bombArray, bombs: 1 });
+		let firstCell = ms2.cellMatrix[0][0];
+		let e2 = new MouseEvent("contextmenu");
+		firstCell.el.dispatchEvent(e2);
+		expect(ms2.bombsLeft).toBe(0);
+		expect(winGameSpy.called).toBe(false);
+		expect(loseGameSpy.calledOnce).toBe(true);
+		//expect(ms2.bombsLeftEl.innerHTML).toBe("You lose!");
+	});
+
 });
