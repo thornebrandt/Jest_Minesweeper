@@ -30,6 +30,7 @@ describe("Cell", () => {
 			new Cell({ isBomb: true }),
 		]
 		cell.el.dispatchEvent(e);
+		expect(cell.numBombs).toBe(3);
 		expect(cell.el.innerHTML).toBe("3");
 	});
 
@@ -49,7 +50,5 @@ describe("Cell", () => {
 		expect(checkBombSpy.calledOnce).toBe(false);
 		cell.el.dispatchEvent(e2);
 		expect(cell.el.classList.contains('flag')).toBe(false);
-
 	});
-
 });

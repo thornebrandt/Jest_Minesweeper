@@ -16,8 +16,9 @@ class MineSweeper{
 
 	reset(){
 		this.el.innerHTML = "";
-		this.bombsLeft = document.createElement("p");
-		this.el.appendChild(this.bombsLeft);
+		this.bombsLeft = this.bombs;
+		this.bombsLeftEl = document.createElement("p");
+		this.el.appendChild(this.bombsLeftEl);
 		this.cellMatrix = [];
 		this.addBombs();
 		this.addCells();
@@ -26,7 +27,7 @@ class MineSweeper{
 	}
 
 	displayBombsLeft(){
-		this.bombsLeft.innerHTML = "10 bombs left";
+		this.bombsLeftEl.innerHTML = this.bombsLeft +  " bombs left";
 	}
 
 	addBombs(){
@@ -48,6 +49,18 @@ class MineSweeper{
 		return int;
 	}
 
+	onFlag(addBomb){
+		if(addBomb){
+			this.bombsLeft--;
+			if(this.bombsLeft === 0){
+				this.bombsLeftEl.innerHTML = "You win!";
+			} else {
+			}
+		} else {
+			this.bombsLeft++;
+		}
+	}
+
 	addCells(){
 		let index = 0;
 		for(let i = 0; i < this.rows; i++){
@@ -59,6 +72,7 @@ class MineSweeper{
 					rowIndex: i,
 					colIndex: j,
 					isBomb: isBomb,
+					onFlag: this.onFlag.bind(this),
 					onExplode: this.reset.bind(this)
 				});
 				row.push(cell);

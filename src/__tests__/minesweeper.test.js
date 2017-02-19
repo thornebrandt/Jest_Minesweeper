@@ -113,7 +113,25 @@ describe("Minesweeper", () => {
 	});
 
 	it("Displays the numbers of bombs", () => {
-		expect(ms.bombsLeft.innerHTML).toBe("10 bombs left");
+		expect(ms.bombsLeftEl.innerHTML).toBe("10 bombs left");
 	});
 
+	it("updates bomb count after flag", () => {
+		let cell = ms.cellMatrix[0][0];
+		let e2 = new MouseEvent("contextmenu");
+		cell.el.dispatchEvent(e2);
+		expect(ms.bombsLeftEl.innerHTML).toBe("9 bombs left")
+		cell.el.dispatchEvent(e2);
+		expect(ms.bombsLeftEl.innerHTML).toBe("10 bombs left")
+	});
+
+	it.only("ends game after bombs depleted", () => {
+		let bombArray = [0];
+		let ms2 = new MineSweeper({ bombArray: bombArray, bombs: 1 });
+		let firstCell = ms2.cellMatrix[0][0];
+		let e2 = new MouseEvent("contextmenu");
+		firstCell.el.dispatchEvent(e2);
+		expect(ms2.bombsLeft).toBe(0);
+		expect(ms2.bombsLeftEl.innerHTML).toBe("You win!");
+	});
 });

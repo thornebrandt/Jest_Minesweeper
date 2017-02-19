@@ -47,7 +47,12 @@ class Cell{
 	}
 
 	displayBombCount(){
-		this.el.innerHTML = this.getNearbyBombCount();
+		this.numBombs = this.numBombs || this.getNearbyBombCount();
+		if(this.flag){
+			this.el.innerHTML = "&nbsp;";
+		} else {
+			this.el.innerHTML = this.numBombs;
+		}
 	}
 
 	displayX(){
@@ -71,9 +76,14 @@ class Cell{
 		this.flag = !this.flag;
 		if(this.flag){
 			this.el.classList.add('flag');
+			this.el.innerHTML = "&nbsp;";
 		} else {
 			this.el.classList.remove('flag');
+			if(this.numBombs){
+				this.el.innerHTML = this.numBombs;
+			}
 		}
+		this.onFlag(this.flag);
 	}
 
 	contextHandler(e){
