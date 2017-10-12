@@ -124,6 +124,19 @@ describe("Minesweeper", () => {
 		expect(string).toBe(expectedString);
 	});
 
+	it("Minesweeper.stringify works for 3 bombs", () => {
+	  let ms = new MineSweeper({
+	    rows: 3,
+	    cols: 3,
+	    bombs: 2,
+	    bombArray: [1,7]
+	  });
+	  let string = ms.stringify();
+	  let expectedString = "[1X1][222][1X1]";
+	  expect(string).toBe(expectedString);
+	});
+
+
 	it("updates bomb count after flag", () => {
 		let cell = ms.cellMatrix[0][0];
 		let e2 = new MouseEvent("contextmenu");
